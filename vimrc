@@ -2,6 +2,9 @@
 " Settings
 "{{{
 
+set encoding=utf-8
+scriptencoding utf-8
+
 " map leader to space
 nnoremap <Space> <Nop>
 let mapleader = " "
