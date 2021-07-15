@@ -68,8 +68,9 @@ inoremap <silent> <Right> <ESC>l
 " Plugins
 "{{{
 
-set nocompatible
-filetype plugin on
+if &compatible
+      set nocompatible
+endif
 
 packadd! matchit
 
@@ -87,6 +88,44 @@ let g:netrw_liststyle=3
 let g:netrw_sort_sequence = '[\/]$,*' " use the previous window to open file
 " open file in previous window
 let g:netrw_browse_split = 4
+
+" ALE settings - install linters as needed
+let g:ale_completion_enabled = 1 " try ALE's built-in completion functionality
+set omnifunc=ale#completion#OmniFunc
+
+let g:ale_sign_error='✗'
+let g:ale_sign_warning='⚠'
+let g:ale_statusline_format = ['✗ %d', '⚠ %d', '✔ ok']
+let g:ale_sign_column_always = 1
+
+ let g:ale_linter_aliases = {'html': ['html', 'javascript', 'css']}
+ let g:ale_linters={
+       \ 'html': ['alex', 'htmlhint', 'proselint', 'stylelint', 'tidy', 'writegood', 'eslint', 'standard', 'xo', 'csslint', 'stylelint'],
+       \ 'php': ['phpcs'],
+       \ 'javascript': ['eslint'],
+       \ 'typescript': ['tsserver', 'eslint'],
+       \ 'typescriptreact': ['tsserver', 'eslint'],
+       \ 'python': ['flake8', 'pylint'],
+       \ 'perl': ['syntax-check', 'perlcritic']
+       \}
+ let g:ale_fixers = {
+       \ 'html': ['tidy', 'prettier'],
+       \ 'javascript': ['eslint', 'js-langserver'],
+       \ 'typescript': ['eslint'],
+       \ 'typescriptreact': ['eslint'],
+       \ 'markdown': ['prettier'],
+       \ 'json': ['prettier', 'fixjson'],
+       \ 'python': ['autopep8'],
+       \ 'perl': ['perltidy']
+       \}
+ let g:ale_type_map = {'perlcritic': {'ES': 'WS', 'E': 'W'}}
+ let g:ale_completion_tsserver_autoimport = 1 " automatic imports from external modules for typescript
+ let g:ale_php_phpcs_standard = 'Wordpress'
+ let g:ale_php_phpcs_use_global = 1
+ let g:ale_completion_enabled = 1
+ let g:ale_echo_msg_format = '[%linter%] %s [%severity%:%code%]' " show linter in messages/loclist
+
+
 
 "}}}
 " custom commands
@@ -166,5 +205,12 @@ if has("autocmd")
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
 endif
+
+" }}}
+" Load Plugins & Helptags
+" {{{
+
+packloadall " load plugins
+silent! helptags ALL " import helptags for plugins
 
 "vim:foldmethod=marker
