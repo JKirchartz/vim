@@ -13,3 +13,6 @@
 [submodule "pack/plugins/start/ale"]
 	path = pack/plugins/start/ale
 	url = https://github.com/dense-analysis/ale.git
+[submodule "pack/plugins/start/ack"]
+	path = pack/plugins/start/ack
+	url = https://github.com/mileszs/ack.vim.git

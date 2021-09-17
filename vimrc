@@ -83,14 +83,16 @@ set keywordprg=:Man
 
 " Make NetRW work more like NerdTree
 map <leader>t <ESC>:Lexplore<CR>
+" open file in previous window
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 let g:netrw_winsize=25
 let g:netrw_liststyle=3
+" let g:netrw_fastbrowse=2 " only obtain directory listings when new, ctrl+l to refresh
+let g:netrw_silent=1 " be quiet
+let g:netrw_special_syntax = 1
 " sort is affecting only: directories on the top, files below
 let g:netrw_sort_sequence = '[\/]$,*' " use the previous window to open file
-" open file in previous window
-let g:netrw_browse_split = 4
 
 " ALE settings - install linters as needed
 let g:ale_completion_enabled = 1 " try ALE's built-in completion functionality
