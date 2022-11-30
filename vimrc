@@ -178,6 +178,8 @@ nmap <leader><leader> :w<CR>
 " spell checking
 map <leader>s :setlocal spell spelllang=en_us<cr>
 
+map <leader>r :registers<cr>
+
 
 " fix windows ^M characters when encodings mess up
 " ( ala http://amix.dk/vim/vimrc.html )
