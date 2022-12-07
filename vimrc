@@ -209,6 +209,11 @@ if has("autocmd")
   autocmd BufWritePre * silent! %s:\(\S*\) \+$:\1:
   " a safer alternative to `set autochdir`
   " autocmd BufEnter * silent! lcd %:p:h
+  " skeleton/template files
+  au BufNewFile *.sh 0r ~/.vim/skeletons/sh
+  au BufNewFile *.htm 0r ~/.vim/skeletons/htm
+  au BufNewFile *.html 0r ~/.vim/skeletons/html
+  au BufNewFile (_draft|_post)/*.md 0r ~/.vim/skeleton/blog.md
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
 endif
