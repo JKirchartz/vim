@@ -2,11 +2,25 @@ if !exists('s:bigrams')
   let s:bigrams="/tmp/vim-bigrams.list"
 endif
 
+function! Bigramcomplete#ClearCorpus()
+  silent system("rm -rf " . shellescape(s:bigrams));
+endfun
+
 " add corpus to bigram list:
 function! Bigramcomplete#AddCorpus(filename)
-  silent !clear
-  silent execute "!awk '{for (i=1; i<NF; i++) print $i, $(i+1)}' " . shellescape(a:filename) . " \| tr -sc '[A-Z][a-z]' '[\\012*]' \| sed -e 's/^[ \t]*//' -e 's/[ \t]/ /' >> " . shellescape(s:bigrams)
-  silent !clear
+  " silent redraw
+  :silent execute("!awk '{for (i=1; i<NF; i++) print $i, $(i+1)}' " . shellescape(a:filename) . " >> " . shellescape(s:bigrams))
+  " silent system("awk '{for (i=1; i<NF; i++) print $i, $(i+1)}' " . shellescape(a:filename) . " \| tr -sc '[A-Z][a-z]' '[\\012*]' \| sed -e 's/^[ \t]*//' -e 's/[ \t]/ /' >> " . shellescape(s:bigrams))
+  " Read the file
+  let lines = readfile(s:bigrams)
+
+  " Sort the lines alphabetically and remove duplicates
+  let sorted_lines = sort(lines, 'strcmp')
+  let deduplicated_lines = uniq(sorted_lines)
+
+  " Write the sorted and deduplicated lines back to the file
+  call writefile(deduplicated_lines, s:bigrams)
+  " silent redraw
 endfun
 
 " completion engine:
@@ -33,4 +47,5 @@ endfun
 
 command! -nargs=1 -complete=file BigramsAdd call Bigramcomplete#AddCorpus(<q-args>)
 
+command! -nargs=+ BigramClear call Bigramcomplete#ClearCorpus()
 command! -nargs=+ BigramComplete call Bigramcomplete#Completer(<q-args>)
