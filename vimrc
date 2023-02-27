@@ -51,6 +51,7 @@ if has('persistent_undo')
 endif
 
 " Setup colors/theme
+colo darkblue
 set laststatus=2 " see the last statusline(stl)
 " show modes & commands in stl
 set showmode showcmd
@@ -66,6 +67,8 @@ inoremap <silent> <Down> <ESC>j
 inoremap <silent> <Left> <ESC>h
 inoremap <silent> <Right> <ESC>l
 
+" clear highlights with the rest of the screen
+nnoremap <C-L> :nohlsearch<CR><C-L>
 
 "}}}
 " Plugins
@@ -81,8 +84,11 @@ packadd! matchit
 runtime ftplugin/man.vim
 set keywordprg=:Man
 
+" TODO: Demo Tagbar Toggle plugin - decide to keep or delete
+map <leader>t :TagbarToggle<CR>
+
 " Make NetRW work more like NerdTree
-map <leader>t <ESC>:Lexplore<CR>
+map <leader>f <ESC>:Lexplore<CR>
 " open file in previous window
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
@@ -99,8 +105,8 @@ let g:ale_completion_enabled = 1 " try ALE's built-in completion functionality
 set omnifunc=ale#completion#OmniFunc
 
 let g:ale_sign_error='✗'
-let g:ale_sign_warning='⚠'
-let g:ale_statusline_format = ['✗ %d', '⚠ %d', '✔ ok']
+let g:ale_sign_warning='❗'
+let g:ale_statusline_format = ['✗ %d', '❗ %d', '✔ ok']
 let g:ale_sign_column_always = 1
 
  let g:ale_linter_aliases = {'html': ['html', 'javascript', 'css']}
@@ -111,7 +117,9 @@ let g:ale_sign_column_always = 1
        \ 'typescript': ['tsserver', 'eslint'],
        \ 'typescriptreact': ['tsserver', 'eslint'],
        \ 'python': ['flake8', 'pylint'],
-       \ 'perl': ['syntax-check', 'perlcritic']
+       \ 'perl': ['perl', 'syntax-check', 'perlcritic'],
+       \ 'scss': ['stylelint'],
+       \ 'sass': ['stylelint']
        \}
  let g:ale_fixers = {
        \ 'html': ['tidy', 'prettier'],
@@ -121,7 +129,9 @@ let g:ale_sign_column_always = 1
        \ 'markdown': ['prettier'],
        \ 'json': ['prettier', 'fixjson'],
        \ 'python': ['autopep8'],
-       \ 'perl': ['perltidy']
+       \ 'perl': ['perltidy'],
+       \ 'scss': ['stylelint'],
+       \ 'sass': ['stylelint']
        \}
  let g:ale_type_map = {'perlcritic': {'ES': 'WS', 'E': 'W'}}
  let g:ale_completion_tsserver_autoimport = 1 " automatic imports from external modules for typescript
@@ -130,6 +140,8 @@ let g:ale_sign_column_always = 1
  let g:ale_completion_enabled = 1
  let g:ale_echo_msg_format = '[%linter%] %s [%severity%:%code%]' " show linter in messages/loclist
 
+ " Ack settings
+ let g:ackhighlight = 1 " highlight text in window (?)
 
 
 "}}}
@@ -141,13 +153,16 @@ cmap w!! %!sudo tee > /dev/null %
 
 " Send the selected text to pastebin.
 " TODO - automate putting the resulting uri on the clipboard, or
-" at least opening it in a browser.
+" opening it in a browser.
 vnoremap cb <esc>:'<,'>:w !curl -F 'clbin=<-' https://clbin.com<CR>
 
 " Calls to fun#... have functions in ~/.vim/autoload/fun.vim
 command -bar Bs call fun#ScratchBuffer()
 command -bar Sb call fun#ScratchBuffer()
 command -bar Scratch call fun#ScratchBuffer()
+
+" romainl's Redir
+command! -nargs=1 -complete=command -bar -range Redir silent call fun#Redir(<q-args>, <range>, <line1>, <line2>)
 
 " get image sizes
 command -bar ImageSize call fun#ImageSize()
@@ -192,6 +207,8 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 if has("autocmd")
   " Use correct indenting for python
   autocmd FileType python setlocal shiftwidth=2 softtabstop=2 expandtab
+  " perl template syntax
+  autocmd BufRead */template/* set syntax=mason
   autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
   " Use correct indenting for YAML
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
@@ -206,7 +223,7 @@ if has("autocmd")
   autocmd Syntax * call fun#Concealer()
   autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown
   " trim trailing spaces (not tabs) before write
-  autocmd BufWritePre * silent! %s:\(\S*\) \+$:\1:
+  " autocmd BufWritePre * silent! %s:\(\S*\) \+$:\1:
   " a safer alternative to `set autochdir`
   " autocmd BufEnter * silent! lcd %:p:h
   " skeleton/template files
@@ -216,6 +233,7 @@ if has("autocmd")
   au BufNewFile (_draft|_post)/*.md 0r ~/.vim/skeleton/blog.md
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
+  autocmd FileType gitcommit call fugitive#FugitiveExecute('diff', '--cached')
 endif
 
 " }}}
@@ -224,5 +242,10 @@ endif
 
 packloadall " load plugins
 silent! helptags ALL " import helptags for plugins
+
+" Automatically fold perl subs
+set foldmethod=syntax
+set foldlevelstart=1
+let perl_fold=1
 
 "vim:foldmethod=marker

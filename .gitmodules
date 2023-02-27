@@ -16,3 +16,9 @@
 [submodule "pack/plugins/start/ack"]
 	path = pack/plugins/start/ack
 	url = https://github.com/mileszs/ack.vim.git
+[submodule "pack/plugins/start/tagbar"]
+	path = pack/plugins/start/tagbar
+	url = https://github.com/preservim/tagbar.git
+[submodule "pack/plugins/start/vim-taggatron"]
+	path = pack/plugins/start/vim-taggatron
+	url = https://github.com/joonty/vim-taggatron.git
