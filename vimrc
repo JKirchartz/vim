@@ -51,7 +51,7 @@ if has('persistent_undo')
 endif
 
 " Setup colors/theme
-colo darkblue
+colorscheme molokai
 set laststatus=2 " see the last statusline(stl)
 " show modes & commands in stl
 set showmode showcmd
