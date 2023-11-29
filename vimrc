@@ -233,7 +233,9 @@ if has("autocmd")
   au BufNewFile (_draft|_post)/*.md 0r ~/.vim/skeleton/blog.md
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
-  autocmd FileType gitcommit call fugitive#FugitiveExecute('diff', '--cached')
+  " open git diff in a vertical split and move it to the right, keeping the
+  " cursor on the left in the commit message
+  autocmd FileType gitcommit silent execute "vert G diff --cached | wincmd x"
 endif
 
 " }}}
