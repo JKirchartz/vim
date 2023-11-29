@@ -235,7 +235,7 @@ if has("autocmd")
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
   " open git diff in a vertical split and move it to the right, keeping the
   " cursor on the left in the commit message
-  autocmd FileType gitcommit silent execute "vert G diff --cached | wincmd x"
+  autocmd FileType gitcommit silent execute "vert Git diff --cached | wincmd x"
 endif
 
 " }}}
