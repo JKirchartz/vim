@@ -25,3 +25,6 @@
 [submodule "pack/plugins/start/molokai"]
 	path = pack/plugins/start/molokai
 	url = https://github.com/tomasr/molokai.git
+[submodule "pack/plugins/start/vim-signify"]
+	path = pack/plugins/start/vim-signify
+	url = https://github.com/mhinz/vim-signify.git
