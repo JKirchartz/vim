@@ -143,6 +143,24 @@ let g:ale_sign_column_always = 1
  " Ack settings
  let g:ackhighlight = 1 " highlight text in window (?)
 
+ " Signify settings (a 'git gutter' and other git workflow bindings)
+
+ set updatetime=100 " Faster sign updates on CursorHold/CursorHoldI
+
+ nnoremap <leader>gd :SignifyDiff<cr>
+ nnoremap <leader>gp :SignifyHunkDiff<cr>
+ nnoremap <leader>gu :SignifyHunkUndo<cr>
+
+ " hunk jumping
+ nmap <leader>gj <plug>(signify-next-hunk)
+ nmap <leader>gk <plug>(signify-prev-hunk)
+
+ " hunk text object
+ omap ic <plug>(signify-motion-inner-pending)
+ xmap ic <plug>(signify-motion-inner-visual)
+ omap ac <plug>(signify-motion-outer-pending)
+ xmap ac <plug>(signify-motion-outer-visual)
+
 
 "}}}
 " custom commands
@@ -236,6 +254,9 @@ if has("autocmd")
   " open git diff in a vertical split and move it to the right, keeping the
   " cursor on the left in the commit message
   autocmd FileType gitcommit silent execute "vert Git diff --cached | wincmd x"
+  " if you remove vim-signify, remove this and the function from ~/.vim/autoload/fun.vim too
+  autocmd User SignifyHunk call fun#show_current_hunk()
+
 endif
 
 " }}}
