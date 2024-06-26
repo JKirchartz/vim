@@ -28,3 +28,6 @@
 [submodule "pack/plugins/start/vim-signify"]
 	path = pack/plugins/start/vim-signify
 	url = https://github.com/mhinz/vim-signify.git
+[submodule "pack/plugins/start/tome"]
+	path = pack/plugins/start/tome
+	url = git@github.com:laktak/tome.git

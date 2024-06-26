@@ -151,16 +151,14 @@ function! fun#Concealer()
   syntax match GreaterThan ">=" conceal cchar=≥
   syntax match LessThan "<=" conceal cchar=≤
   syntax match FatArrow "=>" conceal cchar=➾
-  syntax match FatDoubleArrow "≤>" conceal cchar=⇔
   hi! link Conceal Equals
   hi! link Conceal NotEquals
+  hi! link Conceal FatDoubleArrow
   hi! link Conceal GreaterThan
   hi! link Conceal LessThan
   hi! link Conceal FatArrow
-  hi! link Conceal FatDoubleArrow
   setlocal conceallevel=1
 endfunction
-
 
 " }}}----------------------------------------------------
 " Redirect the output of a Vim or external command into a scratch buffer
