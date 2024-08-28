@@ -248,7 +248,7 @@ if has("autocmd")
   au BufNewFile *.sh 0r ~/.vim/skeletons/sh
   au BufNewFile *.htm 0r ~/.vim/skeletons/htm
   au BufNewFile *.html 0r ~/.vim/skeletons/html
-  au BufNewFile (_draft|_post)/*.md 0r ~/.vim/skeleton/blog.md
+  au BufNewFile {_draft,_post}/*.md 0r ~/.vim/skeleton/blog.md
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
   " open git diff in a vertical split and move it to the right, keeping the

@@ -31,3 +31,6 @@
 [submodule "pack/plugins/start/tome"]
 	path = pack/plugins/start/tome
 	url = git@github.com:laktak/tome.git
+[submodule "pack/plugins/start/vim-unimpaired"]
+	path = pack/plugins/start/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired
