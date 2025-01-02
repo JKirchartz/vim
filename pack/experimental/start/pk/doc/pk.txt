@@ -1,0 +1,54 @@
+*pk.txt*    The Stupid Vim plugin manager for Git submodules
+==============================================================================
+
+AUTHOR
+    jkirchartz <me@jkirchartz.com>
+
+DESCRIPTION
+
+    pk.vim is a minimal Vim plugin manager that doesn't care about anything
+    except for useing Git submodules to manage plugins. It is specifically
+    designed for users managing their Vim setup in the `~/.vim` directory.
+
+    It uses Vim's `pack/` directory for seamless integration.
+
+INSTALLATION
+
+    Currently pk.vim is only available in my vimrc, maybe I'll split it into
+    it's own repo later so that it can be managed by git submodules, too.
+
+    Once the files are in place in `~/.vim/pack` Put this in your vimrc and it
+    "just works":
+
+        packloadall " load plugins
+        silent! helptags ALL " import helptags for plugins
+
+COMMANDS
+    *:PkAdd*
+        Usage: :PkAdd {git_repo} [pack_directory]
+        Adds a Git submodule for a Vim plugin.
+        - {git_repo}: The URL of the Git repository to add.
+        - [pack_directory]: Optional. The pack directory ('start' or 'opt').
+
+    *:PkRemove*
+        Usage: :PkRemove {plugin_path}
+        Removes a plugin and deinitializes its Git submodule.
+
+    *:PkUpdate*
+        Updates all Git submodules for all plugins.
+
+SEE ALSO
+
+    |pack|
+    |packages|
+    |pack-add|
+    |load-plugins|
+
+COPYRIGHT
+    Copyleft (ↄ) 2024 jkirchartz <me@jkirchartz.com>
+    Distributed under terms of the NPL (Necessary Public License) license.
+
+==============================================================================
+
+vim:tw=78:ts=8:ft=help:norl
+

@@ -1,3 +1,12 @@
+Pk.vim
+======
+
+
+Pk.vim is a stupid plugin manager that assumes all your plugins are equally stupid git repositories.
+
+Pk.vim is based on this shell script that only manages git submodules; and probably breaks if you try to use a specific git branch or something.
+
+```bash
 #! /bin/bash
 #
 # pk: the stupid package manager
@@ -38,3 +47,4 @@ case $1 in
     echo 'update';
     ;;
 esac
+```

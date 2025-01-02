@@ -123,7 +123,7 @@ let g:ale_sign_column_always = 1
        \}
  let g:ale_fixers = {
        \ 'html': ['tidy', 'prettier'],
-       \ 'javascript': ['eslint', 'js-langserver'],
+       \ 'javascript': ['eslint'],
        \ 'typescript': ['eslint'],
        \ 'typescriptreact': ['eslint'],
        \ 'markdown': ['prettier'],
@@ -144,7 +144,6 @@ let g:ale_sign_column_always = 1
  let g:ackhighlight = 1 " highlight text in window (?)
 
  " Signify settings (a 'git gutter' and other git workflow bindings)
-
  set updatetime=100 " Faster sign updates on CursorHold/CursorHoldI
 
  nnoremap <leader>gd :SignifyDiff<cr>

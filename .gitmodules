@@ -33,4 +33,4 @@
 	url = git@github.com:laktak/tome.git
 [submodule "pack/plugins/start/vim-unimpaired"]
 	path = pack/plugins/start/vim-unimpaired
-	url = https://github.com/tpope/vim-unimpaired
+	url = git@github.com:tpope/vim-unimpaired.git
