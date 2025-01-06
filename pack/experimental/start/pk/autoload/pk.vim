@@ -1,31 +1,66 @@
 " autoload/pk.vim
-function! pk#add(repo, pack_dir)
-  let l:pack_dir = empty(a:pack_dir) ? 'start' : a:pack_dir
-  let l:plugin_name = substitute(a:repo, '.*/', '', '')
-  let l:plugin_path = expand('~/.vim/pack/plugins/') . l:pack_dir . '/' . l:plugin_name
 
-  call pk#run_git_command('submodule add --depth=1 ' . shellescape(a:repo) . ' ' . shellescape(l:plugin_path))
-  call pk#update()
+" Add a plugin as a submodule
+function! pk#Add(repo, ...) abort
+  let pack_dir = empty(a:000) ? 'start' : a:000
+  let plugin_name = substitute(a:repo, '.*/', '', '')
+  let plugin_path = resolve(expand('~/.vim/pack/plugins/')) . '/' . pack_dir . '/' . plugin_name
+
+  if isdirectory(plugin_path)
+      echo plugin_name . " already installed."
+      return
+  endif
+
+  call pk#RunGitCommand('submodule add --depth=1 ' . shellescape(a:repo) . ' ' . shellescape(plugin_path))
+  call pk#Update()
+  echo "Added plugin: " . plugin_name
 endfunction
 
-function! pk#remove(plugin_path)
-  call pk#run_git_command('submodule deinit --force ' . shellescape(a:plugin_path))
-  call pk#run_git_command('rm --force ' . shellescape(a:plugin_path))
-  call pk#update()
+" Remove a plugin
+function! pk#Remove(plugin_name_or_path) abort
+  " Determine if it's a full path or plugin name
+  if isdirectory(a:plugin_name_or_path)
+    let plugin_path = a:plugin_name_or_path
+  else
+    let plugin_path = glob(resolve(expand('~/.vim/pack/plugins/**/')) . '/' . a:plugin_name_or_path)
+    if empty(plugin_path)
+      echoerr "Plugin not found: " . a:plugin_name_or_path
+      return
+    endif
+  endif
+
+  call pk#RunGitCommand('submodule deinit --force ' . shellescape(plugin_path))
+  call pk#RunGitCommand('rm --force ' . shellescape(plugin_path))
+  call pk#Update()
+  echo "Removed plugin: " . plugin_path
 endfunction
 
-function! pk#update()
-  call pk#run_git_command('submodule update --init --recursive --remote --depth=1')
+" Update all plugins
+function! pk#Update() abort
+  call pk#RunGitCommand('submodule update --init --recursive --remote --depth=1')
+  echo "Updated all plugins."
 endfunction
 
-function! pk#run_git_command(cmd)
-  let l:current_dir = getcwd()
-  execute 'cd ' . fnameescape(expand('~/.vim/')) " only run commands from vim's root directory
-  let l:result = system('git ' . a:cmd)
+" Run a Git command in the ~/.vim directory
+function! pk#RunGitCommand(cmd) abort
+  let current_dir = getcwd()
+  execute 'cd ' . fnameescape(resolve(expand('~/.vim')))
+  let result = system('git ' . a:cmd)
   if v:shell_error
     echoerr "Error running git command: " . a:cmd
-    echoerr l:result
+    echoerr result
   endif
-  execute 'cd ' . fnameescape(l:current_dir) " return to current directory
+  execute 'cd ' . fnameescape(current_dir)
 endfunction
 
+" Tab-completion for plugin paths
+function! pk#CompletePaths(A, L, P) abort
+  let plugin_dir = globpath(resolve(expand('~/.vim/pack/plugins/')), '**/*', 1, 1)
+  let plugin_dirs = filter(plugin_dir, 'isdirectory(v:val)')
+
+  if !empty(a:A)
+    let plugin_dirs = filter(plugin_dirs, 'v:val =~ escape(a:A, "\\")')
+  endif
+
+  return plugin_dirs
+endfunction

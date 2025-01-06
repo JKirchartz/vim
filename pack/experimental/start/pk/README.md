@@ -48,3 +48,5 @@ case $1 in
     ;;
 esac
 ```
+
+for more information see [doc/pk.txt](doc/pk.txt).

@@ -7,9 +7,6 @@
 [submodule "pack/plugins/start/vim-editorconfig"]
 	path = pack/plugins/start/vim-editorconfig
 	url = https://github.com/sgur/vim-editorconfig
-[submodule "pack/plugins/start/vim-fugitive"]
-	path = pack/plugins/start/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive
 [submodule "pack/plugins/start/ale"]
 	path = pack/plugins/start/ale
 	url = https://github.com/dense-analysis/ale.git
@@ -34,3 +31,6 @@
 [submodule "pack/plugins/start/vim-unimpaired"]
 	path = pack/plugins/start/vim-unimpaired
 	url = git@github.com:tpope/vim-unimpaired.git
+[submodule "pack/plugins/start/vim-fugitive"]
+	path = pack/plugins/start/vim-fugitive
+	url = git@github.com:tpope/vim-fugitive.git

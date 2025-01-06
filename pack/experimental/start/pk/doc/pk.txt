@@ -7,8 +7,8 @@ AUTHOR
 DESCRIPTION
 
     pk.vim is a minimal Vim plugin manager that doesn't care about anything
-    except for useing Git submodules to manage plugins. It is specifically
-    designed for users managing their Vim setup in the `~/.vim` directory.
+    except for using Git submodules to manage plugins. It is specifically
+    designed for users managing their Vim setup in the `~/.vim/pack/plugins/` directory.
 
     It uses Vim's `pack/` directory for seamless integration.
 
@@ -17,11 +17,15 @@ INSTALLATION
     Currently pk.vim is only available in my vimrc, maybe I'll split it into
     it's own repo later so that it can be managed by git submodules, too.
 
-    Once the files are in place in `~/.vim/pack` Put this in your vimrc and it
+    Once the files are in placed in `~/.vim/pack` Put this in your vimrc and it
     "just works":
 
         packloadall " load plugins
         silent! helptags ALL " import helptags for plugins
+
+    Optionally, if you don't want it to use `~/.vim/pack/plugins/` you can set
+
+        g:pk_plugin_base_dir = "/any/path/you/want"
 
 COMMANDS
     *:PkAdd*
@@ -31,21 +35,23 @@ COMMANDS
         - [pack_directory]: Optional. The pack directory ('start' or 'opt').
 
     *:PkRemove*
-        Usage: :PkRemove {plugin_path}
+        Usage: :PkRemove {plugin_name_or_path}
         Removes a plugin and deinitializes its Git submodule.
+        (tab-completes appropriate directory names)
 
     *:PkUpdate*
         Updates all Git submodules for all plugins.
 
 SEE ALSO
 
-    |pack|
+    |packloadall|
     |packages|
     |pack-add|
     |load-plugins|
+    |helptags|
 
 COPYRIGHT
-    Copyleft (ↄ) 2024 jkirchartz <me@jkirchartz.com>
+    Copyleft (ↄ) 2025 jkirchartz <me@jkirchartz.com>
     Distributed under terms of the NPL (Necessary Public License) license.
 
 ==============================================================================
