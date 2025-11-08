@@ -34,3 +34,6 @@
 [submodule "pack/plugins/start/vim-fugitive"]
 	path = pack/plugins/start/vim-fugitive
 	url = git@github.com:tpope/vim-fugitive.git
+[submodule "pack/plugins/start/undotree"]
+	path = pack/plugins/start/undotree
+	url = git@github.com:mbbill/undotree.git
