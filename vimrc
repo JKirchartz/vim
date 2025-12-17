@@ -45,9 +45,9 @@ set colorcolumn=80 " show me what's TOO far
 
 if has('persistent_undo')
   " save undos, so you can actually close vim without erasing the undo tree!
-  let target_path = expand('~/.vim/undo');
+  let target_path = expand('$HOME/tmp/.vim_undo')
   if !isdirectory(target_path)
-      silent call mkdir(target_path)
+      silent call mkdir(target_path, 'p')
   endif
   let &undodir=target_path
   set undofile
@@ -176,7 +176,7 @@ cmap w!! %!sudo tee > /dev/null %
 " opening it in a browser.
 vnoremap cb <esc>:'<,'>:w !curl -F 'clbin=<-' https://clbin.com<CR>
 
-" Calls to fun#... have functions in ~/.vim/autoload/fun.vim
+" Calls to fun#... have functions in .config/vim/autoload/fun.vim
 command -bar Bs call fun#ScratchBuffer()
 command -bar Sb call fun#ScratchBuffer()
 command -bar Scratch call fun#ScratchBuffer()
@@ -238,7 +238,7 @@ if has("autocmd")
   " Set title to filename (or something IDK, it's been off for a while)
   "au BufEnter * let &titlestring = ' ' . expand("%:t")
   " ensure background is transparent
-  autocmd ColorScheme * call fun#FixHighlights()
+  " autocmd ColorScheme * call fun#FixHighlights()
   " conceal comparators with utf-8 equivalents
   autocmd Syntax * call fun#Concealer()
   autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown
@@ -247,16 +247,16 @@ if has("autocmd")
   " a safer alternative to `set autochdir`
   " autocmd BufEnter * silent! lcd %:p:h
   " skeleton/template files
-  au BufNewFile *.sh 0r ~/.vim/skeletons/sh
-  au BufNewFile *.htm 0r ~/.vim/skeletons/htm
-  au BufNewFile *.html 0r ~/.vim/skeletons/html
-  au BufNewFile {_draft,_post}/*.md 0r ~/.vim/skeleton/blog.md
+  au BufNewFile *.sh 0r $HOME/.config/vim/skeletons/sh
+  au BufNewFile *.htm 0r $HOME/.config/vim/skeletons/htm
+  au BufNewFile *.html 0r $HOME/.config/vim/skeletons/html
+  au BufNewFile {_draft,_post}/*.md 0r $HOME/.config/vim/skeleton/blog.md
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
   " open git diff in a vertical split and move it to the right, keeping the
   " cursor on the left in the commit message
   autocmd FileType gitcommit silent execute "vert Git diff --cached | wincmd x"
-  " if you remove vim-signify, remove this and the function from ~/.vim/autoload/fun.vim too
+  " if you remove vim-signify, remove this and the function from ~/.config/vim/autoload/fun.vim too
   autocmd User SignifyHunk call fun#show_current_hunk()
 
 endif
