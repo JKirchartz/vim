@@ -37,3 +37,6 @@
 [submodule "pack/plugins/start/undotree"]
 	path = pack/plugins/start/undotree
 	url = git@github.com:mbbill/undotree.git
+[submodule "pack/plugins/start/vimwiki"]
+	path = pack/plugins/start/vimwiki
+	url = https://github.com/vimwiki/vimwiki.git
