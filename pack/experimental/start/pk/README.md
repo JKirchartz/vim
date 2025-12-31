@@ -1,6 +1,7 @@
 Pk.vim
 ======
 
+I'm not sure if this plugin actually works yet... it's just an experiment... but I wanted to have ONE commit on the branch I'm making to preserve and highlight this thing...
 
 Pk.vim is a stupid plugin manager that assumes all your plugins are equally stupid git repositories.
 

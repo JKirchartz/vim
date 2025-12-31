@@ -12,6 +12,12 @@ My New Vim Configs (wip)
 
 run `./pk update` to initialize and update all plugin submodules
 
+# NOTICE:
+
+This branch is pretty much just to keep `pk` kinda fresh somewhere -- the vim plugin side is an experiment, and it's probably a little janky -- but I've decided to go back to vim-plug instead of toying with this, also because it's an easy way to install fzf and integrate it with vim, and I'm going to do that next...
+
+anywho, check out [pack/experimental/start/pk/README.md](pack/experimental/start/pk/README.md)
+
 
 
 # DISCLAIMER:
