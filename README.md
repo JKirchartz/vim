@@ -1,7 +1,13 @@
+This is being archived in favor of [https://tildegit.org/kirch/vim](https://tildegit.org/kirch/vim)
+because my dotfiles want to be free and in the wild, and also I don't think I'm going to be using `pk` anymore,
+I'm going back to [`junegunn/vim-plug`](https://github.com/junegunn/vim-plug) and using Vim 9+
+
+we now return you to your previously scheduled README.md:
+
 vim
 =====
 
-My New Vim Configs (wip)
+# My New Vim Configs (wip)
 
 - intended for use with Vim 8
 - intended to be loaded as git submodule in my dotfiles repo
