@@ -1,4 +1,18 @@
 "}}}
+" let's normalize some variables in case I'm not using this with my other dotfiles
+"{{{
+
+" you are here...
+let s:config_dir = fnamemodify($MYVIMRC, ':p:h')
+" where we're going to put the data for undotree
+let s:cache_dir = !empty($XDG_BIN_HOME) ? $XDG_BIN_HOME : $HOME . '/cache'
+" setup for installing fzf, got this idea from undotree; plug needs a global var
+let g:bin_dir = !empty($XDG_BIN_HOME) ? $XDG_BIN_HOME : $HOME . '/bin'
+if !isdirectory(expand(g:bin_dir))
+    silent call mkdir(expand(g:bin_dir), 'p')
+endif
+
+"}}}
 " Settings
 "{{{
 
@@ -45,9 +59,9 @@ set colorcolumn=80 " show me what's TOO far
 
 if has('persistent_undo')
   " save undos, so you can actually close vim without erasing the undo tree!
-  let target_path = expand('$HOME/tmp/.vim_undo')
+  let target_path = expand(s:cache_dir . '/.vim_undo')
   if !isdirectory(target_path)
-      silent call mkdir(target_path, 'p')
+      silent call mkdir(target_path, 'p', 0700)
   endif
   let &undodir=target_path
   set undofile
@@ -74,18 +88,61 @@ inoremap <silent> <Right> <ESC>l
 nnoremap <C-L> :nohlsearch<CR><C-L>
 
 "}}}
-" Plugins
+" Vim-Plug & Other Plugins
 "{{{
 
 if &compatible
       set nocompatible
 endif
 
-packadd! matchit
+" Install vim-plug if not found
+if empty(glob(s:config_dir . '/autoload/plug.vim'))
+  execute 'silent !curl -fLo ' . glob(s:config_dir . '/autoload/plug.vim') .
+  ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+endif
 
-" keep man in vim, replicate built-in functionality of the K command
-runtime ftplugin/man.vim
-set keywordprg=:Man
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+call plug#begin(s:config_dir . '/plugged')
+
+" Hail to the King
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
+" A Challenger Arises (this might be easier than the script in my dotfiles repo)
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " but where does it install to? I want ~/.local/bin
+Plug 'junegunn/fzf.vim'
+" Everything else
+Plug 'dense-analysis/ale'
+Plug 'joonty/vim-taggatron'
+Plug 'laktak/tome'
+Plug 'mbbill/undotree'
+Plug 'mhinz/vim-signify'
+Plug 'mileszs/ack.vim'
+Plug 'preservim/tagbar'
+Plug 'sgur/vim-editorconfig'
+Plug 'sheerun/vim-polyglot'
+Plug 'tomasr/molokai'
+Plug 'vimwiki/vimwiki'
+" Some that come with vim are good, too:
+packadd! matchit
+runtime ftplugin/man.vim " keep man in vim,
+
+" }}}
+" packload & helptage ALL? do I need this with vim-plug?
+" {{{
+
+" packloadall " load plugins
+" silent! helptags ALL " import helptags for plugins
+
+"}}}
+" Plugin Configs
+"{{{
+
+set keywordprg=:Man " replicate built-in functionality of the K command
 
 " TODO: Demo Tagbar Toggle plugin - decide to keep or delete
 map <leader>t :TagbarToggle<CR>
@@ -163,6 +220,9 @@ let g:ale_sign_column_always = 1
  omap ac <plug>(signify-motion-outer-pending)
  xmap ac <plug>(signify-motion-outer-visual)
 
+" wiki wiki woo
+let g:vimwiki_list = [{'path': $XDG_DATA_HOME . '/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': 'md'}]
 
 "}}}
 " custom commands
@@ -236,21 +296,23 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
         \| exe "normal g'\"" | endif
   " Set title to filename (or something IDK, it's been off for a while)
-  "au BufEnter * let &titlestring = ' ' . expand("%:t")
+  au BufEnter * let &titlestring = ' ' . expand("%:t")
   " ensure background is transparent
-  " autocmd ColorScheme * call fun#FixHighlights()
+  autocmd ColorScheme * call fun#FixHighlights()
   " conceal comparators with utf-8 equivalents
   autocmd Syntax * call fun#Concealer()
   autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown
   " trim trailing spaces (not tabs) before write
-  " autocmd BufWritePre * silent! %s:\(\S*\) \+$:\1:
+  autocmd BufWritePre * silent! %s:\(\S*\) \+$:\1:
   " a safer alternative to `set autochdir`
   " autocmd BufEnter * silent! lcd %:p:h
+  " autocomplete html tags with the power of ftplugin/html.vim
+  au filetype htm,html ino <buffer> <c-k> </<c-x><c-o><esc>==gi
   " skeleton/template files
-  au BufNewFile *.sh 0r $HOME/.config/vim/skeletons/sh
-  au BufNewFile *.htm 0r $HOME/.config/vim/skeletons/htm
-  au BufNewFile *.html 0r $HOME/.config/vim/skeletons/html
-  au BufNewFile {_draft,_post}/*.md 0r $HOME/.config/vim/skeleton/blog.md
+  au BufNewFile *.sh execute '0read ' . s:config_dir .'/skeletons/sh'
+  au BufNewFile *.htm execute '0read ' . s:config_dir .'/skeletons/htm'
+  au BufNewFile *.html execute '0read ' . s:config_dir .'/skeletons/html'
+  au BufNewFile {_draft,_post}/*.md execute '0read ' . s:config_dir . '/skeletons/blog.md'
   " if a file starts with a shebang, automatically make it executable
   au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
   " open git diff in a vertical split and move it to the right, keeping the
@@ -261,16 +323,9 @@ if has("autocmd")
 
 endif
 
-" }}}
-" Load Plugins & Helptags
-" {{{
-
-packloadall " load plugins
-silent! helptags ALL " import helptags for plugins
-
-" Automatically fold perl subs
 set foldmethod=syntax
 set foldlevelstart=1
+" Automatically fold perl subs
 let perl_fold=1
 
 "vim:foldmethod=marker

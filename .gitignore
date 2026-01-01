@@ -1,2 +1,4 @@
+autoload/plug.vim
+plugged/
 .netrwhist
 undo/*
