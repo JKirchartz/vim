@@ -5,7 +5,7 @@
 " you are here...
 let s:config_dir = fnamemodify($MYVIMRC, ':p:h')
 " where we're going to put the data for undotree
-let s:cache_dir = !empty($XDG_BIN_HOME) ? $XDG_BIN_HOME : $HOME . '/cache'
+let s:cache_dir = !empty($XDG_CACHE_HOME) ? $XDG_CACHE_HOME : $HOME . '/.cache'
 " setup for installing fzf, got this idea from undotree; plug needs a global var
 let g:bin_dir = !empty($XDG_BIN_HOME) ? $XDG_BIN_HOME : $HOME . '/bin'
 if !isdirectory(expand(g:bin_dir))
